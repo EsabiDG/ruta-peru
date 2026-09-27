@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu destino | RUTA PERÚ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body class="resultado-body">
+
+<header class="navbar navbar-solid">
+    <div class="container nav-container">
+        <a href="{{ url_for('index') }}" class="logo">
+            <span class="logo-text">RUTA<strong>PERÚ</strong></span>
+        </a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}#inicio">Inicio</a></li>
+                <li><a href="{{ url_for('index') }}#destinos">Destinos</a></li>
+                <li><a href="{{ url_for('index') }}#encuentra" class="btn-nav">Probar de nuevo</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<main class="resultado-main">
+    <div class="container">
+
+        {% if resultado.encontrado %}
+
+        <div class="resultado-hero">
+            <span class="section-tag">Tu destino recomendado</span>
+            <h1 class="resultado-titulo">{{ resultado.recomendacion }}</h1>
+            <div class="certeza-pill">
+                <span class="certeza-num">{{ (resultado.certeza * 100) | round | int }}%</span>
+                <span class="certeza-label">de coincidencia</span>
+            </div>
+        </div>
+
+        <p class="resultado-descripcion">{{ resultado.descripcion }}</p>
+
+        <div class="resultado-layout">
+
+            <div class="resultado-imagen">
+                <img src="{{ url_for('static', filename='images/' + resultado.imagen) }}"
+                     alt="{{ resultado.recomendacion }}"
+                     onerror="this.style.display='none'; this.parentElement.classList.add('img-fallback'); this.parentElement.innerHTML='<span>{{ resultado.recomendacion }}</span>';">
+            </div>
+
+            <div class="resultado-lateral">
+
+                <div class="resultado-card">
+                    <h3>Tus intereses</h3>
+                    <ul class="condiciones-lista">
+                        {% for c in resultado.condiciones_cumplidas %}
+                        <li>{{ c }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="resultado-card">
+                    <h3>Coincidencia</h3>
+                    <div class="coincidencia-visual">
+                        <div class="coincidencia-circulo">
+                            <span>{{ (resultado.certeza * 100) | round | int }}%</span>
+                        </div>
+                        <p>{{ resultado.recomendacion }} comparte {{ resultado.coincidencias }} de tus {{ resultado.total_intereses }} intereses.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="resultado-porque">
+            <div class="resultado-card resultado-card-wide">
+                <h3>¿Por qué este destino?</h3>
+                <p>{{ resultado.explicacion }}</p>
+            </div>
+        </div>
+
+        <div class="resultado-botones">
+            <a href="{{ url_for('index') }}#encuentra" class="btn btn-primary">Volver a probar</a>
+            <a href="{{ url_for('index') }}#destinos" class="btn btn-ghost">Explorar destinos</a>
+        </div>
+
+        {% else %}
+
+        <div class="sin-resultado">
+            <h1>No seleccionaste ningún interés</h1>
+            <p>Vuelve al cuestionario y marca al menos una opción para recibir una recomendación.</p>
+            <a href="{{ url_for('index') }}#encuentra" class="btn btn-primary">Intentar nuevamente</a>
+        </div>
+
+        {% endif %}
+
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="footer-brand">
+            <span class="logo-text">RUTA<strong>PERÚ</strong></span>
+            <p>Descubre los destinos turísticos del Perú</p>
+        </div>
+        <div class="footer-info">
+            <p>© 2026 RUTA PERÚ</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
